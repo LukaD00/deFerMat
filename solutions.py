@@ -1,6 +1,6 @@
 import math
 import scipy
-from integrate import Trapezoidal, TrapezoidalSingularity
+from integrate import Trapezoidal, TrapezoidalSingularity, TanhSinhQuadrature
 
 
 def task1():
@@ -64,7 +64,17 @@ def task5():
     analytical = lambda x : 0.5 * math.sinh(x**2) * (x**2 - 1) + 0.5 * math.sqrt(math.pi) * scipy.special.erf(x)
     print(analytical(x))
 
+def task6():
+    integrator = TrapezoidalSingularity(0.0000001)
+    integrand = lambda t : math.sin(1/t) * math.sqrt(t) + math.cos(t)
 
+    f = lambda x : integrator(integrand, 0, x)
+    x = 2
+    print(f(x))
+    print(scipy.integrate.quad(integrand, 0, x))
+
+    analytical = lambda x : math.sin(x) + (2 * math.sqrt(x) * (math.sin(1/x)*x + 2*math.cos(1/x)) + 2**(5/2) * math.sqrt(math.pi) * scipy.special.fresnel(math.sqrt(2 / (math.pi * x)))[0]) / 3
+    print(analytical(x))
 
 if __name__=="__main__":
-    task5()
+    task6()
